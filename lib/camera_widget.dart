@@ -95,6 +95,8 @@ class _CameraWidgetState extends State<CameraWidget> {
                       },
                     );
                   }
+
+                  return;
                 }
 
                 ref.read(loadingStateProvider.notifier).toggle();
