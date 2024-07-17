@@ -57,6 +57,7 @@ class _CameraWidgetState extends State<CameraWidget> {
           child: Consumer(builder: (context, ref, _) {
             return FloatingActionButton(
               onPressed: () async {
+                ref.read(loadingStateProvider.notifier).toggle();
                 final image = await _cameraController.takePicture();
 
                 print("New Image path:" + image.path);
@@ -68,6 +69,7 @@ class _CameraWidgetState extends State<CameraWidget> {
                 // });
 
                 if (recognisedText != null) {
+                  ref.read(loadingStateProvider.notifier).toggle();
                   ref
                       .read(textNotifierProvider.notifier)
                       .setState(recognisedText);
@@ -94,11 +96,27 @@ class _CameraWidgetState extends State<CameraWidget> {
                     );
                   }
                 }
+
+                ref.read(loadingStateProvider.notifier).toggle();
               },
               child: const Icon(Icons.camera),
             );
           }),
         ),
+        Align(
+          alignment: Alignment.center,
+          child: Consumer(
+            builder: (context, ref, child) {
+              final isLoading = ref.watch(loadingStateProvider);
+              return Visibility(
+                visible: isLoading,
+                child: const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              );
+            },
+          ),
+        )
       ],
     );
   }
